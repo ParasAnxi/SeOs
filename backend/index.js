@@ -9,6 +9,8 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import authRoutes from "./routes/auth.js";
+
 //** FILE CONFIG */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +28,9 @@ app.use(morgan("common"));
 
 //** FILE */
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+
+//** ROUTES */
+app.use("/auth",authRoutes);
 
 //** SERVER */
 const PORT = process.env.PORT;
