@@ -10,6 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.js";
+import existRoutes from "./routes/exist.js";
 
 //** FILE CONFIG */
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +32,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 //** ROUTES */
 app.use("/auth",authRoutes);
+app.use("/find", existRoutes);
 
 //** SERVER */
 const PORT = process.env.PORT;
