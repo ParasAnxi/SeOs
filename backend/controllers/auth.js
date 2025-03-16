@@ -41,4 +41,27 @@ export const loginUser = async(req, res) => {
         res.status(500).json({error: error.message});
     }
 };
- 
+//** CHANGE PASSWORD */
+export const changePassword = async(req, res)=>{
+    const {userName, password, newPassword} = req.body;
+    try{
+        const user = await User.findOne({ userName : userName});
+        if(!user) return res.status(404).json({error: "User not found!"});
+        const verfiyPassword = await bcrypt.compare(password, user.password);
+        if(!verfiyPassword){
+            return res.status(401).json({error:"Invalid Credentials!!"});
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(newPassword,salt);
+        const newInfo = await User.findByIdAndUpdate(
+            {_id: user._id},
+            {password: hashPassword},
+            {new: true}
+        );
+        await newInfo.save();
+        const newUser = await User.findOne({userName: userName});
+        res.status(200).json({user : newUser,message: "password changed successfully."});
+    }catch(error){
+        res.status(500).json({error: error.message});
+    }
+}
