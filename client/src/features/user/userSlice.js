@@ -38,12 +38,23 @@ export const userLogin = createAsyncThunk("auth/login", async (data) => {
   const userData = await response.json();
   return userData;
 });
-
+//** CHANGE PASSWORD */
+export const changePassword = createAsyncThunk("auth/changePassword",async(data)=>{
+  const response = await fetch(`${USER_API}/changePassword`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const userData = await response.json();
+  return userData;
+})
 //** REDUCERS */
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reduceres: {
+  reducers: {
     setTheme: (state) => {
       state.theme = state.theme === "light" ? "dark" : "light";
     },
@@ -72,6 +83,12 @@ export const userSlice = createSlice({
       .addCase(userAccount.fulfilled, (state, action) => {
         state.status = "idle";
         state.error = action.payload.error ? "error" : "noError";
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.status = "idle";
       });
   },
 });
